@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+    oracle-db:
+        container_name: oracle-db
+        image: camus122/oradbcdp
+        restart: always
+        ports:
+            - 1521:1521
+        volumes:
+            - oradata:/opt/oracle/oradata
+        environment: 
+            - ORACLE_ALLOW_REMOTE=true
+            - ORACLE_SID=ORCLCDB
+            - ORACLE_PDB=ORCLPDB1
+            - ORACLE_PWD=C1berbank_Digit@l
+            - LANG=en_US.UTF-8
+
+    manager-application:
+        container_name: manager-application
+        image: manager-application:2.4.4
+        depends_on:
+            - oracle-db
+        network_mode: "host"
+        hostname: localhost
+        restart: always
+        ports:
+            - 8080:8080
+            
+volumes:
+    oradata:
+        name: oradata
+        external: true
+       

@@ -1,0 +1,3 @@
+com/database/manager/ManagerApplication.class
+com/database/manager/controller/ManagerOracleController.class
+com/database/manager/model/Connection.class
