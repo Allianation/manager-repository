@@ -29,7 +29,7 @@ public class TestOracleDataSource {
         	int rowIndex = 0;
         	
         	// Extract data from result set
-        	while (rs.next()) {
+        	while (rs.next()) {	
         		
         	    rowIndex++;
         	    
