@@ -12,7 +12,9 @@ import java.util.List;
 public class TestOracleDataSource {
 	
 	public static void getData() {
+		
         final String SQL_QUERY = "SELECT * FROM users";
+        
         // Open a connection
         try (Connection con = OracleDataSource.getConnection("digital", "password", "ORCLCDB", "localhost" ,1521); PreparedStatement pst = con.prepareStatement(SQL_QUERY); ResultSet rs = pst.executeQuery();) {
         	
@@ -24,19 +26,21 @@ public class TestOracleDataSource {
         	}
         	
         	StringBuilder sb = new StringBuilder("[");
-        	
         	int rowIndex = 0;
         	
         	// Extract data from result set
         	while (rs.next()) {
+        		
         	    rowIndex++;
+        	    
         	    // Collect row data as objects in a List
         	    List<Object> rowData = new ArrayList<>();
         	    for (int i = 1; i <= rsmd.getColumnCount(); i++) {
         	        rowData.add(rs.getObject(i));
         	    }
-        	    
+     
         	    sb.append("{");
+        	    
         	    for (int colIndex = 0; colIndex < rsmd.getColumnCount(); colIndex++) {
         	        //String objType = "null";
         	        String objString = "";
