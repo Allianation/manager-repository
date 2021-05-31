@@ -42,16 +42,21 @@ public class TestOracleDataSource {
         	    sb.append("{");
         	    
         	    for (int colIndex = 0; colIndex < rsmd.getColumnCount(); colIndex++) {
-        	        //String objType = "null";
+        	        String objType = "null";
         	        String objString = "";
         	        Object columnObject = rowData.get(colIndex);
         	        if (columnObject != null) {
         	            objString = columnObject.toString() + " ";
-        	            //objType = columnObject.getClass().getName();
+        	            objType = columnObject.getClass().getName();
         	        }
         	       
-        	        sb.append("\"" + columnNames.get(colIndex).toLowerCase() + "\"" + ":" + "\"" + objString + "\" ,");
-        	        
+        	        sb.append("\"" + columnNames.get(colIndex).toLowerCase() + "\"" + ":" );
+        	        if (objType.equals("java.math.BigDecimal")) {
+        	        	sb.append(objString + ", ");
+        	        } else {
+        	        	sb.append("\"" + objString + "\" ,");
+        	        }
+        	   
         	    }
         	    sb.append("},");
         	}
