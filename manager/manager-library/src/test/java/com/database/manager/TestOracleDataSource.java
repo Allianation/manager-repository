@@ -4,7 +4,10 @@ package com.database.manager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestOracleDataSource {
 	
@@ -12,14 +15,48 @@ public class TestOracleDataSource {
         final String SQL_QUERY = "SELECT * FROM users";
         // Open a connection
         try (Connection con = OracleDataSource.getConnection("digital", "password", "ORCLCDB", "localhost" ,1521); PreparedStatement pst = con.prepareStatement(SQL_QUERY); ResultSet rs = pst.executeQuery();) {
+        	
+        	// Collect column names
+        	List<String> columnNames = new ArrayList<>();
+        	ResultSetMetaData rsmd = rs.getMetaData();
+        	for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+        	    columnNames.add(rsmd.getColumnLabel(i));
+        	}
+        	
+        	StringBuilder sb = new StringBuilder("[");
+        	
+        	int rowIndex = 0;
+        	
         	// Extract data from result set
         	while (rs.next()) {
-        		// Retrieve by column name
-                System.out.print("First Name: " + rs.getString("first_name"));
-                System.out.print(", Last Name: " + rs.getString("last_name"));
-                System.out.print(", Email: " + rs.getString("email"));
-                System.out.println(", User Status: " + rs.getString("id_user_status"));
-            }
+        	    rowIndex++;
+        	    // Collect row data as objects in a List
+        	    List<Object> rowData = new ArrayList<>();
+        	    for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+        	        rowData.add(rs.getObject(i));
+        	    }
+        	    
+        	    sb.append("{");
+        	    for (int colIndex = 0; colIndex < rsmd.getColumnCount(); colIndex++) {
+        	        //String objType = "null";
+        	        String objString = "";
+        	        Object columnObject = rowData.get(colIndex);
+        	        if (columnObject != null) {
+        	            objString = columnObject.toString() + " ";
+        	            //objType = columnObject.getClass().getName();
+        	        }
+        	       
+        	        sb.append("\"" + columnNames.get(colIndex).toLowerCase() + "\"" + ":" + "\"" + objString + "\" ,");
+        	        
+        	    }
+        	    sb.append("},");
+        	}
+        	
+        	sb.append("]");
+        	
+        	System.out.printf("Cantidad de Filas: " + rowIndex + "%n");
+        	System.out.printf(sb.toString());
+        	
         } catch (SQLException e) {
             e.printStackTrace();
         }
