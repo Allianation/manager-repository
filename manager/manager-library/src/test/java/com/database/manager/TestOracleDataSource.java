@@ -9,11 +9,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.database.manager.utils.QueryEnum;
+
 public class TestOracleDataSource {
 	
 	public static void getData() {
 		
-        final String SQL_QUERY = "SELECT * FROM users";
+        final String SQL_QUERY = QueryEnum.CLIENT_BANKS.getQuery();
         
         // Open a connection
         try (Connection con = OracleDataSource.getConnection("digital", "password", "ORCLCDB", "localhost" ,1521); PreparedStatement pst = con.prepareStatement(SQL_QUERY); ResultSet rs = pst.executeQuery();) {
