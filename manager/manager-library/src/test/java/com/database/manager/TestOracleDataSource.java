@@ -42,11 +42,15 @@ public class TestOracleDataSource {
         	    }
      
         	    sb.append("{");
+        	    String dataSeparator = "";
         	    
         	    for (int colIndex = 0; colIndex < rsmd.getColumnCount(); colIndex++) {
         	        String objType = "null";
         	        String objString = "";
         	        Object columnObject = rowData.get(colIndex);
+        	        
+    				sb.append(dataSeparator);
+        	        
         	        if (columnObject != null) {
         	            objString = columnObject.toString() + " ";
         	            objType = columnObject.getClass().getName();
@@ -54,10 +58,11 @@ public class TestOracleDataSource {
         	       
         	        sb.append("\"" + columnNames.get(colIndex).toLowerCase() + "\"" + ":" );
         	        if (objType.equals("java.math.BigDecimal")) {
-        	        	sb.append(objString + ", ");
+        	        	sb.append(objString);
         	        } else {
-        	        	sb.append("\"" + objString + "\" ,");
+        	        	sb.append("\"" + objString + "\"");
         	        }
+        	        dataSeparator = ", ";
         	   
         	    }
         	    sb.append("},");
